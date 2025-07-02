@@ -1,0 +1,78 @@
+# config.yaml
+
+input:
+  data_dir: "/home/recsyschallenge25/Cleora/data"
+  relevant_clients: "/home/recsyschallenge25/Cleora/data/input/relevant_clients.npy"
+
+
+# Scegli tra "gnn", "lightgcn", "gin", "gcn", "gat", "ngcf" o "cleora"
+embed_method: "baseline"
+baseline:
+  # finestre temporali in giorni per le statistiche aggregate
+  num_days: [1,7,30]
+  # numero di valori top da considerare in ciascuna colonna
+  top_n: 50
+
+# Parametri per GNN
+gnn:
+  hidden_channels: 32
+  out_channels: 32
+  lr: 1e-2
+  epochs: 50
+  device: "cuda"       # oppure "cpu"
+
+# Parametri per LightGCN
+lightgcn:
+  embedding_dim: 128      # dimensione finale dell'embedding (uguale a out_channels GNN)
+  num_layers: 2          # numero di strati di propagazione LightGCN
+  lr: 1e-2                # learning rate
+  epochs: 200            # numero di epoche
+  device: "cuda"          # o "cpu"
+
+# Parametri per GCN
+gcn:
+  channels: 32        # dimensione embedding finale (out_channels)
+  num_layers: 1       # numero di HeteroConv<GCNConv> da applicare
+  lr: 1e-3
+  epochs: 100
+  device: "cuda"
+
+# Parametri per GIN
+gin:
+  channels: 64         # dim embedding finale
+  num_layers: 1        # numero di layer GINConv
+  num_layers_nn: 1     # numero di layer Linear→ReLU interni a ciascun GINConv
+  aggr: "sum"          # aggregator usato in GINConv
+  eps: 0.0            # epsilon iniziale
+  train_eps: false      # rendi learnable l'epsilon
+  lr: 1e-3
+  epochs: 50
+  device: "cuda"
+
+gat:
+  channels: 128           # <- sostituisce in_channels/out_channels/hidden_channels
+  num_layers: 2
+  heads: 2
+  dropout: 0.2
+  lr: 1e-2
+  epochs: 200
+  device: "cuda"
+
+ngcf:
+  channels: 64           # dimensione degli embedding intermedi
+  num_layers: 2          # numero di layer NGCF
+  dropout: 0.2           # dropout sui messaggi
+  lr: 1e-2               # learning rate
+  epochs: 50             # numero di epoche
+  device: "cuda"         # dispositivo di training
+
+
+output:
+  embeddings_npy: "outputs/client_embeddings.npy"
+  client_ids_npy: "outputs/client_ids.npy"
+
+splitting:
+  challenge_data_dir: "/home/recsyschallenge25/Cleora/data"
+
+score:
+  score_dir: "score"
