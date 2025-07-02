@@ -164,7 +164,7 @@ if __name__ == "__main__":
         np.save(embeddings_dir / args.client_ids_filename, baseline_ids)
         logger.info("Embeddings saved to %s", embeddings_dir)
 
-    # 2) Branching: GNN vs LightGCN vs GIN vs Cleora
+    # 2) Branching: GNN vs LightGCN vs GIN vs ...
     if cfg['embed_method'] in ['gnn', 'lightgcn', 'gin', 'gcn', 'gat', 'ngcf']:
         # 2.1) Split per target
         print("Splitting data to compute targets...")
@@ -264,7 +264,7 @@ if __name__ == "__main__":
 
         torch.cuda.empty_cache()  # utile, ma non sufficiente se sopra va in GPU
 
-        # 2.6) Train con GNN o LightGCN
+        # 2.6) Train con GNN o LightGCN o altri modelli
         if cfg['embed_method'] == 'gnn':
             print("Training HeteroGNN...")
             user_emb = train_hetero_gnn(
@@ -277,7 +277,7 @@ if __name__ == "__main__":
         elif cfg['embed_method'] == 'lightgcn':
             embeddings_dir = Path(cfg['output']['embeddings_npy']).parent
 
-# load using the same filenames you passed in
+            # load using the same filenames you passed in
             baseline_ids  = np.load(embeddings_dir / "client_ids.npy")
             baseline_embs = np.load(embeddings_dir / "embeddings.npy")
 
